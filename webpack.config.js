@@ -9,7 +9,7 @@ module.exports = [
      JS用モジュール
     ----------------- */
   entry: {
-    main: "./src/js/index.js"
+    main: "./src/js/main.js"
   },
   output: {
     path: path.resolve(__dirname, "dist/js"),
