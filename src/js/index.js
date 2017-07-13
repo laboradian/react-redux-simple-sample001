@@ -53,22 +53,21 @@ const AdditionComponent = ({ total, onClickToAdd, onClickToClear }) => {
     <div>
         <label>足し算</label>
         <input type="text"
-            id="exampleInputName1"
-            placeholder="10"
-            defaultValue="100"
-            ref={(input) => { textInput = input; }}
+          placeholder="10"
+          defaultValue="100"
+          ref={(input) => { textInput = input; }}
         />
         <button onClick={() => onClickToAdd(textInput.value) }>足す</button>
         <button onClick={onClickToClear}>クリア</button>
-        合計 <span>{total}</span>
+        <span className="result">合計：{total}</span>
     </div>
   );
 };
 
 AdditionComponent.propTypes = {
-  total: PropTypes.number,
-  onClickToAdd: PropTypes.func,
-  onClickToClear: PropTypes.func
+  total: PropTypes.number.isRequired,
+  onClickToAdd: PropTypes.func.isRequired,
+  onClickToClear: PropTypes.func.isRequired
 };
 
 //-----------------------------------

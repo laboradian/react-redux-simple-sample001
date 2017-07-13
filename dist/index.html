@@ -5,14 +5,162 @@
   <!--  Font Awesome の CDN  -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
   <link rel="stylesheet" href="css/main.css">
-  <title>React + Redux のシンプルなサンプル001: Example</title>
+  <title>React + Redux のシンプルなサンプル001</title>
 </head>
 <body>
 
   <header>
-    <h1>React + Redux のシンプルなサンプル001: Example</h1>
+    <h1>React + Redux のシンプルなサンプル001</h1>
   </header>
+
+  <div class="well">
+    <p>内容</p>
+    <ul>
+      <li>1つのJavaScriptファイルで、React + Redux を使うサンプルです。</li>
+      <li>ボタンを押すと、画面に入力された値を足していきます。</li>
+    </ul>
+  </div>
+
+  <div class="panel panel-success">
+    <div class="panel-heading">入力した値を足していきます。</div>
+    <div class="panel-body">
+      <div id="root"></div>
+    </div>
+  </div>
+
+  <div class="panel panel-info">
+    <div class="panel-heading">JavaScriptのコード</div>
+    <div class="panel-body">
+      <pre>
+        <code>import &#039;../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js&#039;;
+import &#039;babel-polyfill&#039;
+
+import _ from &#039;lodash&#039;
+import React from &#039;react&#039;
+import { render } from &#039;react-dom&#039;
+import { Provider, connect } from &#039;react-redux&#039;
+import { createStore } from &#039;redux&#039;
+import PropTypes from &#039;prop-types&#039;
+
+// index.html ファイルをコピーする
+require(&#039;file-loader?name=../../dist/[name].[ext]!../index.html&#039;);
+
+//-----------------------------------
+// Action creators (Actionを返す)
+//-----------------------------------
+
+const additionAction = (value) =&gt; {
+  return {
+    type: &#039;ADD_VALUE&#039;,
+    value
+  }
+}
+const clearAdditionAction = () =&gt; {
+  return {
+    type: &#039;CLEAR_VALUE&#039;,
+  }
+}
+
+//-----------------------------------
+// Reducer
+//-----------------------------------
+
+const additionReducer = (state = 0, action) =&gt; {
+  switch (action.type) {
+    case &#039;ADD_VALUE&#039;:
+      return state + action.value
+    case &#039;CLEAR_VALUE&#039;:
+      return 0;
+    default:
+      return state
+  }
+}
+
+//-----------------------------------
+// Component
+//-----------------------------------
+
+const AdditionComponent = ({ total, onClickToAdd, onClickToClear }) =&gt; {
+  let textInput;
+  return (
+    &lt;div&gt;
+        &lt;label&gt;足し算&lt;/label&gt;
+        &lt;input type=&quot;text&quot;
+          placeholder=&quot;10&quot;
+          defaultValue=&quot;100&quot;
+          ref={(input) =&gt; { textInput = input; }}
+        /&gt;
+        &lt;button onClick={() =&gt; onClickToAdd(textInput.value) }&gt;足す&lt;/button&gt;
+        &lt;button onClick={onClickToClear}&gt;クリア&lt;/button&gt;
+        &lt;span className=&quot;result&quot;&gt;合計：{total}&lt;/span&gt;
+    &lt;/div&gt;
+  );
+};
+
+AdditionComponent.propTypes = {
+  total: PropTypes.number.isRequired,
+  onClickToAdd: PropTypes.func.isRequired,
+  onClickToClear: PropTypes.func.isRequired
+};
+
+//-----------------------------------
+// Container
+//-----------------------------------
+
+const AdditionContainer = (() =&gt; {
+
+  const mapStateToProps = (state/*, ownProps*/) =&gt; {
+    const props = {
+      total: state
+    };
+    return props;
+  }
+  
+  const mapDispatchToProps = (dispatch) =&gt; {
+    return {
+      onClickToAdd: (value) =&gt; {
+        const val = parseInt(value);
+        if (_.isNaN(val)) {
+          //
+        } else {
+          dispatch(additionAction(val));
+        }
+      },
+      onClickToClear: () =&gt; {
+        dispatch(clearAdditionAction());
+      }
+    }
+  }
+
+  return connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(AdditionComponent);
+
+})();
+
+//-----------------------------------
+// Store
+//-----------------------------------
+
+const store = createStore(additionReducer)
+
+//-----------------------------------
+// 画面に表示する
+//-----------------------------------
+
+render(
+  &lt;Provider store={store}&gt;
+    &lt;AdditionContainer /&gt;
+  &lt;/Provider&gt;,
+  document.getElementById(&#039;root&#039;)
+)
+        </code>
+      </pre>
+    </div>
+  </div>
 
   <div class="well">
     <p>React と Redux のサイト</p>
@@ -27,17 +175,11 @@
     </ul>
   </div>
 
-  <div class="panel panel-success">
-    <div class="panel-heading">入力した値を足していきます。</div>
-    <div class="panel-body">
-      <div id="root"></div>
-    </div>
-  </div>
-
   <hr>
   <footer>© 2017 <a href="http://laboradian.com/">Laboradian</a></footer>
-  
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
   <script src="js/main.js" charset="utf-8"></script>
 </body>
 </html>
