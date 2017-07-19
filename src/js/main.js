@@ -47,22 +47,25 @@ const additionReducer = (state = 0, action) => {
 // Component
 //-----------------------------------
 
-const AdditionComponent = ({ total, onClickToAdd, onClickToClear }) => {
-  let textInput;
-  return (
-    <div>
-        <label>足し算</label>
-        <input type="text"
-          placeholder="10"
-          defaultValue="100"
-          ref={(input) => { textInput = input; }}
-        />
-        <button onClick={() => onClickToAdd(textInput.value) }>足す</button>
-        <button onClick={onClickToClear}>クリア</button>
-        <span className="result">合計：{total}</span>
-    </div>
-  );
-};
+class AdditionComponent extends React.Component {
+  render() {
+    const { total, onClickToAdd, onClickToClear } = this.props;
+    let textInput;
+    return (
+      <div>
+          <label>足し算</label>
+          <input type="text"
+            placeholder="10"
+            defaultValue="100"
+            ref={(input) => { textInput = input; }}
+          />
+          <button onClick={() => onClickToAdd(textInput.value) }>足す</button>
+          <button onClick={onClickToClear}>クリア</button>
+          <span className="result">合計：{total}</span>
+      </div>
+    );
+  }
+}
 
 AdditionComponent.propTypes = {
   total: PropTypes.number.isRequired,
